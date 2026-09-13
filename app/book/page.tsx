@@ -28,7 +28,7 @@ function getTomorrowSlots() {
 
 export default function BookPage() {
   const router = useRouter();
-  const { dateLabel, slots } = useMemo(getTomorrowSlots, []);
+  const { dateLabel, slots } = useMemo(() => getTomorrowSlots(), []);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
