@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bridge with Jenn
 
-## Getting Started
+Site for a co-parenting mediation practice: book a session, share your
+side beforehand, read how it works. Next.js 16 · React 19 · Tailwind 4 ·
+TypeScript.
 
-First, run the development server:
+## Routes
+
+| Route | What it is |
+|---|---|
+| `/` | Landing |
+| `/share-your-side` (+ `/a`, `/b`) | Private intake — each parent's side, before the session |
+| `/book` | Session booking (slot picker) |
+| `/peace-room` | What a session actually looks like |
+| `/podcast` | Show page + signup |
+| `/resources` (+ 3 articles) | Written guidance |
+| `/donate`, `/thank-you` | Support + post-submit |
+
+## API
+
+| Endpoint | State |
+|---|---|
+| `POST /api/intake` | Prototype — logs the payload; production note in-file (Airtable, keyed by shared case ID) |
+| `GET/POST /api/reviews` | **Moderated** — see below; in-memory store |
+| `PATCH /api/reviews` | Moderation approve/reject |
+| `POST /api/guest-requests`, `/api/live-show-signup`, `/api/podcast-pitches`, `/api/sponsor-requests` | Prototype stubs, same pattern |
+
+## Reviews moderation
+
+Submissions land unapproved and render nowhere until a moderator acts.
+The public `GET` serves approved reviews only and never returns the
+queue; `POST` returns no review content.
+
+Moderation is disabled unless `REVIEWS_MODERATION_TOKEN` is set (the
+PATCH endpoint answers 503 rather than standing open):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# queue (returns ids)
+curl -H "x-moderation-token: $REVIEWS_MODERATION_TOKEN" https://host/api/reviews
+# approve / reject
+curl -X PATCH https://host/api/reviews \
+  -H "x-moderation-token: $REVIEWS_MODERATION_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"id":"<id>","action":"approve"}'   # or "reject" (drops it)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Token comparison is timing-safe. Before real traffic, move the in-memory
+store to a database — the moderation flags and gates carry over.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Develop
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run lint && npx tsc --noEmit
+npm run build && npm start
+```
