@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Inter, Fraunces } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
@@ -28,7 +29,7 @@ const navLinks = [
   { href: "/donate", label: "Donate" },
 ];
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html
       lang="en"
