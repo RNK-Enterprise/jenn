@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fbf6ef;
+  --surface: #ffffff;
+  --surface-muted: #f3ece1;
+  --foreground: #2b2620;
+  --foreground-muted: #6b6259;
+  --border: #e6dccb;
+
+  --clay: #bd5b3a;
+  --clay-dark: #9c4a2e;
+  --sage: #5f7a5c;
+  --sage-dark: #46603f;
+  --sky: #6c85a6;
+  --sky-dark: #4e6a86;
+  --cream: #fbf6ef;
+  --ink: #2b2620;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-clay: var(--clay);
+  --color-clay-dark: var(--clay-dark);
+  --color-sage: var(--sage);
+  --color-sage-dark: var(--sage-dark);
+  --color-sky: var(--sky);
+  --color-sky-dark: var(--sky-dark);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* Lift + colored underglow for the top nav: a subtle hover "float" that
+   picks up whatever hover color the link already switches to. */
+.nav-glow {
+  display: inline-block;
+  transition: transform 220ms ease, text-shadow 220ms ease;
+}
+.nav-glow:hover,
+.nav-glow:focus-visible {
+  transform: translateY(-3px);
+  text-shadow: 0 10px 16px currentColor;
+}
+
+.btn-glow {
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+.btn-glow:hover,
+.btn-glow:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 22px -8px var(--clay);
+}
+.btn-glow-sage:hover,
+.btn-glow-sage:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 22px -8px var(--sage);
+}
